@@ -24,11 +24,11 @@ data['Task'] = pd.Categorical(data['Task'],
                                ordered=True)
 data = data.sort_values(['Task', 'Group'])
 
-# 定义颜色方案（淡色版本，匹配论文风格）
+# 定义颜色方案（严格匹配原图配色）
 colors = {
-    'Control': '#A5D6A7',  # 淡绿色（按您要求）
-    'MCI': '#FFE082',      # 淡黄色
-    'AD': '#EF9A9A'        # 淡红色
+    'Control': '#90CAF9',  # 淡蓝色（原图配色）
+    'MCI': '#FFCC80',      # 淡橙黄色（原图配色）
+    'AD': '#EF9A9A'        # 淡红色（原图配色）
 }
 
 # 创建5个子图（每个任务一个）
@@ -110,9 +110,9 @@ print(f"\n生成文件:")
 print(f"  - {output_base}.pdf (矢量格式)")
 print(f"  - {output_base}.png (高分辨率)")
 
-print("\n颜色方案（淡色版本）:")
-print(f"  Control: 淡绿色 {colors['Control']}")
-print(f"  MCI: 淡黄色 {colors['MCI']}")
+print("\n颜色方案（严格匹配原图）:")
+print(f"  Control: 淡蓝色 {colors['Control']}")
+print(f"  MCI: 淡橙黄色 {colors['MCI']}")
 print(f"  AD: 淡红色 {colors['AD']}")
 
 print("\n样式特点:")

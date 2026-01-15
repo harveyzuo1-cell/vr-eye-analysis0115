@@ -1,0 +1,30 @@
+提交包文件清单
+================================================================================
+
+核心数据文件（4个）:
+--------------------------------------------------------------------------------
+  roi_summary_long.csv           (    72.0 KB)
+  events_long.csv                (   580.5 KB)
+  participants_master.csv        (     3.9 KB)
+  analysis_params.yaml           (    14.9 KB)
+
+说明文档:
+--------------------------------------------------------------------------------
+  FOR_EXPERT_README.txt                    (     7.9 KB)
+  00_提交包总结.md                              (    13.5 KB)
+  快速开始指南.md                                (     8.9 KB)
+  README_专家需求分析.md                         (    30.8 KB)
+  analysis_params.yaml                     (    14.9 KB)
+  roi_summary_report.txt                   (     1.8 KB)
+  saccade_filtering_report.txt             (     3.3 KB)
+  participants_master_README.txt           (     3.4 KB)
+  demographics_update_report.txt           (     1.8 KB)
+  FILE_LIST.txt                            (     0.0 KB)
+
+数据处理脚本:
+--------------------------------------------------------------------------------
+  scripts/1_merge_roi_summary.py
+  scripts/2_merge_events.py
+  scripts/3_create_participants_master.py
+  scripts/4_update_demographics.py
+  scripts/5_prepare_final_package.py

@@ -1,0 +1,463 @@
+# ==============================================================================
+# VR眼动追踪数据分析参数 (Analysis Parameters for VR Eye-Tracking Data)
+# ==============================================================================
+# 版本: 1.0
+# 日期: 2026-01-15
+# 目的: 明确统计分析的所有口径、定义和筛选规则，避免伪重复和统计口径混乱
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. 样本信息 (Sample Information)
+# ------------------------------------------------------------------------------
+sample:
+  total_participants: 60
+  excluded_participants: 0  # 当前无排除，若有排除需在participants_master.csv中标记
+
+  groups:
+    - name: "Control"
+      full_name: "Healthy Controls"
+      description: "健康对照组"
+      n: 20
+      id_prefix: "n"
+      id_range: "n01-n20"
+      expected_mmse_range: [18, 21]  # 满分21分
+
+    - name: "MCI"
+      full_name: "Mild Cognitive Impairment"
+      description: "轻度认知障碍组"
+      n: 20
+      id_prefix: "m"
+      id_range: "m01-m20"
+      expected_mmse_range: [15, 19]
+
+    - name: "AD"
+      full_name: "Alzheimer's Disease"
+      description: "阿尔兹海默症组"
+      n: 20
+      id_prefix: "ad"
+      id_range: "ad03-ad22"  # 注意：ID有偏移
+      expected_mmse_range: [9, 13]
+
+  tasks:
+    total: 5
+    names: ["Q1", "Q2", "Q3", "Q4", "Q5"]
+    descriptions:
+      Q1: "时间定向 (Temporal Orientation)"
+      Q2: "地点定向 (Spatial Orientation)"
+      Q3: "即刻记忆 (Immediate Recall)"
+      Q4: "注意力与计算 (Attention and Calculation)"
+      Q5: "延迟回忆 (Delayed Recall)"
+    max_duration_seconds: 180  # 每个任务最长180秒
+
+# ------------------------------------------------------------------------------
+# 2. ROI指标定义 (ROI Metrics Definitions)
+# ------------------------------------------------------------------------------
+roi_metrics:
+  FixTime:
+    # 术语修正：这个指标实际上是"ROI总注视时间"而非"平均注视时长"
+    correct_term: "ROI dwell time"
+    incorrect_terms: ["mean fixation duration"]  # 避免使用
+
+    full_name: "Total fixation time within ROI"
+    chinese_name: "ROI总注视时间"
+
+    definition: >
+      Sum of all fixation durations (in seconds) that occurred within the
+      Region of Interest (ROI). This represents the total time the participant's
+      gaze remained fixated on the ROI across the entire task.
+
+    unit: "seconds"
+    data_type: "continuous"
+    expected_range: [0, 180]  # 不应超过任务总时长
+
+    aggregation_method: "task-weighted mean"
+    aggregation_details: >
+      For participant-level analysis, each participant's FixTime is computed
+      as the mean across 5 tasks (Q1-Q5). This is a task-weighted mean where
+      each task contributes equally, regardless of the number of ROI segments
+      within that task.
+
+    notes: >
+      - Values are in seconds, typically ranging from 0 to 20+ seconds
+      - Much larger than typical fixation duration (200-400 ms)
+      - ROI-level values should NOT be directly used in ANOVA without
+        accounting for repeated measures within participants
+
+  EnterCount:
+    full_name: "ROI entry count"
+    chinese_name: "ROI进入次数"
+
+    definition: >
+      Number of times the participant's gaze entered the ROI from outside.
+      Each transition from non-ROI to ROI area counts as one entry.
+
+    unit: "count"
+    data_type: "discrete"
+    expected_range: [0, 50]  # 合理范围
+
+    aggregation_method: "task-weighted mean"
+
+    notes: >
+      - Higher values may indicate more exploratory scanning behavior
+      - Should be interpreted together with FixTime and RegressionCount
+
+  RegressionCount:
+    full_name: "Regression count"
+    chinese_name: "回视次数"
+
+    definition: >
+      Number of times the participant's gaze returned to a previously viewed
+      ROI after moving away. This indicates re-reading or re-examination behavior.
+
+    unit: "count"
+    data_type: "discrete"
+    expected_range: [0, 50]
+
+    aggregation_method: "task-weighted mean"
+
+    notes: >
+      - Higher values may indicate difficulty in comprehension or memory
+      - Particularly relevant for cognitive assessment tasks
+
+# ------------------------------------------------------------------------------
+# 3. ROI类型分类 (ROI Type Classification)
+# ------------------------------------------------------------------------------
+roi_types:
+  KW:
+    full_name: "Keyword ROI"
+    chinese_name: "关键词区域"
+    description: "Task-relevant target words or phrases that participants need to identify or recall"
+    semantic_importance: "high"
+    expected_attention: "high"
+
+  INST:
+    full_name: "Instruction ROI"
+    chinese_name: "指令区域"
+    description: "Task instruction text that guides participants on what to do"
+    semantic_importance: "medium"
+    expected_attention: "medium"
+
+  BG:
+    full_name: "Background ROI"
+    chinese_name: "背景区域"
+    description: "Non-task-relevant background areas"
+    semantic_importance: "low"
+    expected_attention: "low"
+
+# ------------------------------------------------------------------------------
+# 4. Events筛选规则 (Event Filtering Criteria)
+# ------------------------------------------------------------------------------
+# 非常重要：明确筛选规则以移除无效的眼动事件
+event_filtering:
+
+  fixation:
+    inclusion_criteria:
+      - "EventType == 'fixation'"
+      - "Duration_ms > 0"  # 排除零持续时间的无效注视
+
+    rationale: >
+      Zero-duration fixations are artifacts from the event detection algorithm
+      and do not represent real fixation behavior.
+
+    expected_removal_rate: "< 5%"  # 预期移除率
+
+  saccade:
+    inclusion_criteria:
+      - "EventType == 'saccade'"
+      - "Duration_ms > 0"  # 排除零持续时间的无效眼跳
+      - "Amplitude_deg > 0"  # 排除零振幅的无效眼跳
+
+    rationale: >
+      Saccades with zero duration or zero amplitude are placeholder records
+      or noise from the event detection pipeline. They do not represent actual
+      eye movements and must be excluded from analysis.
+
+    expected_removal_rate: "40-50%"  # 基于数据观察
+
+    optional_filters:
+      - criterion: "Amplitude_deg < 30"
+        description: "Physiological upper limit for saccade amplitude"
+        apply: false  # 可选，暂不应用
+
+      - criterion: "Winsorization at 1st and 99th percentile"
+        description: "Robust handling of outliers"
+        apply: false  # 可选
+
+    # 术语修正（非常重要！）
+    terminology:
+      correct_metric: "Saccade amplitude"
+      correct_unit: "degrees of visual angle (deg)"
+      correct_comparisons:
+        - "larger amplitudes"
+        - "smaller amplitudes"
+        - "greater saccadic extent"
+
+      incorrect_terms:  # 必须避免
+        - "saccade speed"
+        - "faster saccades"
+        - "slower saccades"
+
+      explanation: >
+        Amplitude_deg measures the angular distance of the eye movement,
+        NOT the speed. While the data also contains MaxVel and MeanVel fields
+        (which DO measure velocity), the primary metric for Table 6 should be
+        amplitude. Using "faster/slower" to describe amplitude is incorrect
+        and will be flagged by reviewers.
+
+# ------------------------------------------------------------------------------
+# 5. 统计分析设置 (Statistical Analysis Settings)
+# ------------------------------------------------------------------------------
+statistical_analysis:
+
+  # 主分析：Participant-level
+  primary_analysis:
+    level: "participant"
+    description: "Each participant contributes one value (averaged across tasks/ROIs)"
+    sample_size: 60  # N=60, not N=1650
+
+    method: "One-way ANOVA"
+    factor: "Group (Control/MCI/AD)"
+    dependent_variables:
+      - "FixTime_mean"
+      - "EnterCount_mean"
+      - "RegressionCount_mean"
+      - "SaccadeAmplitude_mean"
+
+    post_hoc: "Tukey HSD"
+    post_hoc_alternative: "Bonferroni correction"
+
+    effect_size: "Cohen's d (pairwise) or partial η² (omnibus)"
+    confidence_interval: 0.95
+    alpha: 0.05
+
+    assumptions:
+      normality: "Shapiro-Wilk test"
+      homogeneity: "Levene's test"
+      alternative_if_violated: "Kruskal-Wallis H test (non-parametric)"
+
+  # 敏感性分析：ROI-level 或 Task-level 混合效应模型
+  sensitivity_analysis:
+    level: "ROI or Task"
+    description: "Accounts for repeated measures within participants"
+
+    method: "Linear Mixed-Effects Model (LMM)"
+
+    fixed_effects:
+      - "Group (Control/MCI/AD)"
+      - "ROI_type (KW/INST/BG)"  # 可选
+      - "Task (Q1-Q5)"  # 可选
+      - "Group × ROI_type"  # 交互作用
+
+    random_effects:
+      - "Participant (random intercept)"
+      - "Task | Participant (random slope, if applicable)"
+
+    model_comparison: "Likelihood ratio test (LRT) or AIC/BIC"
+
+    software: "R (lme4 package) or Python (statsmodels.MixedLM)"
+
+  # 分类/ROC分析
+  classification_analysis:
+    purpose: "Predictive modeling for AD vs Control discrimination"
+
+    approach: "Nested cross-validation"
+    outer_folds: 5
+    inner_folds: 5
+
+    models:
+      - "Logistic Regression"
+      - "Random Forest"
+      - "Support Vector Machine"
+      - "Gradient Boosting"
+
+    feature_standardization: "z-score within training folds (no leakage)"
+
+    metrics:
+      - "AUC (Area Under ROC Curve)"
+      - "Sensitivity"
+      - "Specificity"
+      - "Accuracy"
+      - "F1-score"
+
+    confidence_intervals: "Bootstrap (1000 iterations)"
+
+    interpretability: "SHAP values or feature importance"
+
+# ------------------------------------------------------------------------------
+# 6. 数据质量控制 (Quality Control)
+# ------------------------------------------------------------------------------
+quality_control:
+
+  inclusion_criteria:
+    - "Calibration error < 2 degrees"
+    - "Data loss < 20% per task"
+    - "Minimum 3 out of 5 tasks completed"
+    - "Minimum 5 valid fixations per task"
+    - "Minimum 3 valid saccades per task (after filtering)"
+
+  exclusion_criteria:
+    - "Calibration failure (error >= 2 deg)"
+    - "Excessive data loss (>= 20%)"
+    - "Task non-completion (< 3 tasks)"
+    - "Equipment malfunction"
+    - "Participant withdrawal"
+
+  data_checks:
+    - check: "FixTime should not exceed task duration (180s)"
+      action: "Flag for manual review"
+
+    - check: "Negative values in FixTime, EnterCount, RegressionCount"
+      action: "Data error - investigate source"
+
+    - check: "Saccade amplitude > 30 deg"
+      action: "Potential outlier - review but may be valid"
+
+  reporting:
+    - "Number of excluded participants and reasons"
+    - "Data quality metrics per group (mean tracking confidence, data loss %)"
+    - "Event filtering statistics (before/after counts)"
+
+# ------------------------------------------------------------------------------
+# 7. VR-MMSE评分系统 (VR-MMSE Scoring System)
+# ------------------------------------------------------------------------------
+vr_mmse:
+  version: "21-point scale"
+  description: "VR version of MMSE with 5 tasks, maximum score 21 points"
+
+  scoring_breakdown:
+    Q1_temporal_orientation:
+      max_score: 5
+      components:
+        年份: 1
+        季节: 1
+        月份: 1
+        星期: 2  # 注意：原始数据显示星期可能是2分
+
+    Q2_spatial_orientation:
+      max_score: 5
+      components:
+        省市区: 2
+        街道: 1
+        建筑: 1
+        楼层: 1
+
+    Q3_immediate_recall:
+      max_score: 3
+      components:
+        词1: 1
+        词2: 1
+        词3: 1
+
+    Q4_attention_calculation:
+      max_score: 5
+      components:
+        "100-7": 1
+        "93-7": 1
+        "86-7": 1
+        "79-7": 1
+        "72-7": 1
+
+    Q5_delayed_recall:
+      max_score: 3
+      components:
+        词1: 1
+        词2: 1
+        词3: 1
+
+  interpretation:
+    normal: ">= 18"  # Control组平均约19-21
+    mild_impairment: "15-17"  # MCI组平均约15-19
+    severe_impairment: "< 15"  # AD组平均约9-13
+
+  notes: >
+    - VR-MMSE总分与纸质MMSE总分应一致
+    - 分任务得分(Q1-Q5)可用于task-level分析
+    - 与眼动指标的关联分析应在task-level进行
+
+# ------------------------------------------------------------------------------
+# 8. 文件输出规范 (File Output Specifications)
+# ------------------------------------------------------------------------------
+output_files:
+
+  roi_summary_long:
+    filename: "roi_summary_long.csv"
+    level: "ROI × Task × Participant"
+    rows: ~1650  # 60 participants × 5 tasks × ~5-6 ROIs
+    key_columns:
+      - "ParticipantID"
+      - "Group"
+      - "Task"
+      - "ROI"
+      - "ROI_type"
+      - "FixTime"
+      - "EnterCount"
+      - "RegressionCount"
+
+  events_long:
+    filename: "events_long.csv"
+    level: "Event (fixation or saccade)"
+    rows: ~9000  # After filtering from ~18000
+    key_columns:
+      - "ParticipantID"
+      - "Group"
+      - "Task"
+      - "EventType"
+      - "Duration_ms"
+      - "Amplitude_deg"
+      - "MaxVel"
+      - "MeanVel"
+      - "ROI"
+
+  participants_master:
+    filename: "participants_master.csv"
+    level: "Participant"
+    rows: 60
+    key_columns:
+      - "ParticipantID"
+      - "Group"
+      - "Age"
+      - "Sex"
+      - "EducationYears"
+      - "MoCA"
+      - "MMSE_paper_total"
+      - "VR_MMSE_total"
+      - "VR_MMSE_Q1 to Q5"
+      - "Excluded"
+      - "ExclusionReason"
+
+# ------------------------------------------------------------------------------
+# 9. 特别注意事项 (Critical Notes)
+# ------------------------------------------------------------------------------
+critical_notes:
+
+  pseudoreplication_warning: >
+    DO NOT use ROI-level data (N=1650) directly in ANOVA without proper
+    handling of repeated measures. This will inflate degrees of freedom
+    and produce invalid p-values. Always use participant-level aggregation
+    for primary analysis or LMM for sensitivity analysis.
+
+  terminology_table6: >
+    Table 6 MUST be renamed from "Saccade speed" to "Saccade amplitude (deg)".
+    All text should use "larger/smaller amplitudes" instead of "faster/slower".
+
+  mmse_id_mismatch: >
+    MCI group IDs in MMSE files are uppercase (M01-M20) but should be
+    converted to lowercase (m01-m20) to match subjects.csv.
+    AD group has ID offset: MMSE has ad01-ad20, but subjects.csv has ad03-ad22.
+
+  missing_demographics: >
+    Age, Sex, EducationYears, and MoCA are currently missing and marked as NA.
+    These should be collected from recruitment records or clinical assessments
+    before running covariate-adjusted analyses.
+
+# ------------------------------------------------------------------------------
+# 10. 版本历史 (Version History)
+# ------------------------------------------------------------------------------
+version_history:
+  - version: "1.0"
+    date: "2026-01-15"
+    author: "Claude Code"
+    changes:
+      - "Initial creation based on expert requirements"
+      - "Defined all metrics, filtering rules, and statistical approaches"
+      - "Addressed terminology corrections for saccade metrics"

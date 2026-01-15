@@ -4,6 +4,8 @@
 # 日期：2026-01-15
 
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')  # 使用非交互式后端
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -61,6 +63,7 @@ print("文件名：Figure3_Saccade_Amplitude_by_Task.pdf / .png")
 
 # 打印统计摘要
 print("\n统计摘要：")
-print(data.groupby('Group')['Mean_Amplitude_deg'].agg(['mean', 'std']))
+print(data.groupby('Group', observed=True)['Mean_Amplitude_deg'].agg(['mean', 'std']))
 
-plt.show()
+# plt.show()  # 注释掉，避免等待交互窗口
+plt.close()

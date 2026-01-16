@@ -1,0 +1,61 @@
+ParticipantID,Group,Age,Sex,Included,ExclusionReason,Notes
+n01,Control,71,M,Yes,,
+n02,Control,75,M,Yes,,
+n03,Control,69,M,Yes,,
+n04,Control,74,M,Yes,,
+n05,Control,71,M,Yes,,
+n06,Control,75,M,Yes,,
+n07,Control,68,M,Yes,,
+n08,Control,70,M,Yes,,
+n09,Control,66,M,Yes,,
+n10,Control,70,M,Yes,,
+n11,Control,69,F,Yes,,
+n12,Control,74,F,Yes,,
+n13,Control,73,F,Yes,,
+n14,Control,75,F,Yes,,
+n15,Control,74,F,Yes,,
+n16,Control,67,F,Yes,,
+n17,Control,68,F,Yes,,
+n18,Control,67,F,Yes,,
+n19,Control,67,F,Yes,,
+n20,Control,69,F,Yes,,
+m01,MCI,71,M,Yes,,
+m02,MCI,68,M,Yes,,
+m03,MCI,66,M,Yes,,
+m04,MCI,73,M,Yes,,
+m05,MCI,69,M,Yes,,
+m06,MCI,68,M,Yes,,
+m07,MCI,71,M,Yes,,
+m08,MCI,72,M,Yes,,
+m09,MCI,67,M,Yes,,
+m10,MCI,65,M,Yes,,
+m11,MCI,66,F,Yes,,
+m12,MCI,72,F,Yes,,
+m13,MCI,73,F,Yes,,
+m14,MCI,71,F,Yes,,
+m15,MCI,69,F,Yes,,
+m16,MCI,72,F,Yes,,
+m17,MCI,73,F,Yes,,
+m18,MCI,67,F,Yes,,
+m19,MCI,66,F,Yes,,
+m20,MCI,68,F,Yes,,
+ad03,AD,69,M,Yes,,Originally ad03 in raw data
+ad04,AD,73,M,Yes,,Originally ad04 in raw data
+ad05,AD,73,M,Yes,,Originally ad05 in raw data
+ad06,AD,65,M,Yes,,Originally ad06 in raw data
+ad07,AD,71,M,Yes,,Originally ad07 in raw data
+ad08,AD,72,M,Yes,,Originally ad08 in raw data
+ad09,AD,72,M,Yes,,Originally ad09 in raw data
+ad10,AD,75,M,Yes,,Originally ad10 in raw data
+ad11,AD,65,M,Yes,,Originally ad11 in raw data
+ad12,AD,67,M,Yes,,Originally ad12 in raw data
+ad13,AD,75,F,Yes,,Originally ad13 in raw data
+ad14,AD,74,F,Yes,,Originally ad14 in raw data
+ad15,AD,74,F,Yes,,Originally ad15 in raw data
+ad16,AD,71,F,Yes,,Originally ad16 in raw data
+ad17,AD,72,F,Yes,,Originally ad17 in raw data
+ad18,AD,65,F,Yes,,Originally ad18 in raw data
+ad19,AD,71,F,Yes,,Originally ad19 in raw data
+ad20,AD,72,F,Yes,,Originally ad20 in raw data
+ad21,AD,67,F,Yes,,Originally ad21 in raw data
+ad22,AD,71,F,Yes,,Originally ad22 in raw data

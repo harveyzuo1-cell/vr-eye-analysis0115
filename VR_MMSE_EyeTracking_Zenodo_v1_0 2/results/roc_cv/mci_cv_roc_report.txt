@@ -1,0 +1,57 @@
+================================================================================
+MCI vs Controls - Cross-Validated ROC Analysis Report
+================================================================================
+
+Analysis Date: 2026-01-15
+Method: 10-Fold Stratified Cross-Validation
+Standardization: Leakage-safe (within-fold, training-only fit)
+
+Sample Size:
+  Control: 20 participants
+  MCI: 20 participants
+  Total: 40 participants
+
+Features Used:
+  1. VR_MMSE_total
+  2. Mean_FixTime
+  3. Mean_EnterCount
+  4. Mean_RegressionCount
+  5. Mean_Saccade_Amplitude
+
+Cross-Validation Results:
+  Cross-validated AUC: 0.9400
+  95% CI (Bootstrap): [0.84–1.00]
+  Mean Fold AUC: 0.9750 ± 0.0750
+
+Fold-by-Fold AUCs:
+  Fold  1: 1.0000
+  Fold  2: 1.0000
+  Fold  3: 1.0000
+  Fold  4: 1.0000
+  Fold  5: 0.7500
+  Fold  6: 1.0000
+  Fold  7: 1.0000
+  Fold  8: 1.0000
+  Fold  9: 1.0000
+  Fold 10: 1.0000
+
+Optimal Classification Threshold (Youden Index):
+  Threshold: 0.4965
+  Sensitivity: 1.0000 (100.0%)
+  Specificity: 0.8500 (85.0%)
+  Youden Index: 0.8500
+
+================================================================================
+For Manuscript (Copy-Paste Values)
+================================================================================
+
+[CV_AUC_MCI] = 0.94
+[CI_low–CI_high] = 0.84–1.00
+[Sens_MCI] = 100.0%
+[Spec_MCI] = 85.0%
+
+Example sentence for Results:
+"For MCI vs controls, the cross-validated AUC was 0.94 
+(95% CI 0.84–1.00), with sensitivity of 100.0% 
+and specificity of 85.0% at the optimal threshold."
+

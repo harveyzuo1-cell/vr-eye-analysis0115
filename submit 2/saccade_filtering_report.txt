@@ -1,0 +1,114 @@
+================================================================================
+眼动事件筛选报告 (Saccade Filtering Report)
+================================================================================
+
+生成日期: 2026-01-15
+输出文件: events_long.csv
+
+1. 筛选规则 (Filtering Criteria)
+--------------------------------------------------------------------------------
+Fixation事件:
+  - Duration_ms > 0 (排除零持续时间的无效注视)
+
+Saccade事件:
+  - Duration_ms > 0 (排除零持续时间的无效眼跳)
+  - Amplitude_deg > 0 (排除零振幅的无效眼跳)
+
+术语说明:
+  - Saccade amplitude (deg): 眼跳振幅（角度），表示眼睛移动的角距离
+  - 正确术语: larger/smaller amplitudes
+  - 避免使用: faster/slower saccades (这是描述速度，不是振幅)
+
+2. 筛选前后统计 (Before/After Filtering)
+--------------------------------------------------------------------------------
+
+总体统计:
+  筛选前: 18,060 事件
+  筛选后: 9,293 事件
+  移除: 8,767 事件 (48.54%)
+
+
+Control组:
+  Fixation: 1192 → 1192 (移除 0)
+  Saccade: 1686 → 301 (移除 1385)
+
+  筛选前的零值情况:
+    Fixation零Duration: 0
+    Saccade零Duration: 1385
+    Saccade零Amplitude: 1385
+
+MCI组:
+  Fixation: 2549 → 2549 (移除 0)
+  Saccade: 4271 → 894 (移除 3377)
+
+  筛选前的零值情况:
+    Fixation零Duration: 0
+    Saccade零Duration: 3377
+    Saccade零Amplitude: 3377
+
+AD组:
+  Fixation: 3030 → 3030 (移除 0)
+  Saccade: 5332 → 1327 (移除 4005)
+
+  筛选前的零值情况:
+    Fixation零Duration: 0
+    Saccade零Duration: 4005
+    Saccade零Amplitude: 4005
+
+3. 筛选后事件分布 (Event Distribution After Filtering)
+--------------------------------------------------------------------------------
+
+每人每任务平均事件数:
+
+  Control:
+    Fixation: 11.9 ± 3.9
+    Saccade: 3.2 ± 1.8
+
+  MCI:
+    Fixation: 25.5 ± 16.0
+    Saccade: 9.0 ± 6.6
+
+  AD:
+    Fixation: 30.3 ± 11.8
+    Saccade: 13.3 ± 6.2
+
+4. Saccade振幅统计 (Saccade Amplitude Statistics)
+--------------------------------------------------------------------------------
+
+Control组 (n=301 saccades):
+  均值 (Mean): 10.555 deg
+  标准差 (SD): 7.147 deg
+  中位数 (Median): 8.279 deg
+  范围 (Range): [1.271, 56.679] deg
+  25th percentile: 6.192 deg
+  75th percentile: 11.780 deg
+
+MCI组 (n=894 saccades):
+  均值 (Mean): 12.803 deg
+  标准差 (SD): 8.405 deg
+  中位数 (Median): 10.161 deg
+  范围 (Range): [0.981, 65.279] deg
+  25th percentile: 6.753 deg
+  75th percentile: 15.849 deg
+
+AD组 (n=1327 saccades):
+  均值 (Mean): 12.908 deg
+  标准差 (SD): 7.812 deg
+  中位数 (Median): 10.531 deg
+  范围 (Range): [1.022, 51.688] deg
+  25th percentile: 6.881 deg
+  75th percentile: 15.975 deg
+
+
+5. 数据质量评估 (Data Quality Assessment)
+--------------------------------------------------------------------------------
+
+✓ 所有筛选后的事件都满足质量标准:
+  - 无零持续时间的fixation事件
+  - 无零持续时间或零振幅的saccade事件
+  - 每组每人每任务都有足够的有效事件用于分析
+
+⚠️ 注意事项:
+  - 筛选移除的事件主要是算法识别的噪声点或占位符
+  - 筛选比例在各组之间相对均衡，不影响组间比较的有效性
+  - 建议在统计分析中使用筛选后的数据

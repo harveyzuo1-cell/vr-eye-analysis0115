@@ -1,0 +1,121 @@
+================================================================================
+VR眼动追踪数据提交包 - 文件清单（更新版 v2.0）
+================================================================================
+更新日期：2026-01-15
+版本：v2.0（含补充材料）
+
+一、核心数据文件（4个）- 用于统计分析
+================================================================================
+1. roi_summary_long.csv (72 KB)
+   - ROI注视指标汇总（Tables 4-5）
+   - 1,647行 = 60人 × 5任务 × ~5.5 ROI
+
+2. events_long.csv (581 KB)
+   - 眼动事件详细数据（Table 6）
+   - 9,293个事件（已筛选）
+
+3. participants_master.csv (3.9 KB)
+   - 60人总表（完整人口学+MMSE）
+   - 含VR_MMSE_Q1-Q5分任务得分
+
+4. analysis_params.yaml (15 KB)
+   - 统计分析口径与定义
+
+二、补充材料（新增）- 提高可追溯性
+================================================================================
+
+A. 原始组级数据（带ADQ_ID）- 7个文件
+   目录：original_data_with_ADQ_ID/
+
+   1. control_All_ROI_Summary.csv (17 KB)
+   2. mci_All_ROI_Summary.csv (20 KB)
+   3. ad_All_ROI_Summary.csv (20 KB)
+   4. control_All_Events.csv (179 KB)
+   5. mci_All_Events.csv (435 KB)
+   6. ad_All_Events.csv (548 KB)
+   7. README_ORIGINAL_DATA.txt (2.3 KB)
+
+   用途：保留ADQ_ID便于追溯数据来源
+
+B. ROI字典与映射 - 2个文件
+
+   1. ROI_Dictionary.txt (3.7 KB)
+      - 各任务ROI详细列表
+      - ROI类型（KW/INST/BG）定义
+
+   2. ROI_Mapping.csv (485 B)
+      - 机器可读的ROI映射表
+
+   用途：让"ROI_type统计"可复现
+
+C. Figure 3重绘材料 - 5个文件
+
+   1. figure3_data_participant_task_level.csv (14 KB)
+   2. figure3_data_group_task_level.csv (1.1 KB)
+   3. figure3_plot_script.R (1.7 KB)
+   4. figure3_plot_script.py (2.2 KB)
+   5. README_FIGURE3.txt (2.1 KB)
+
+   用途：修正术语为"Saccade amplitude (deg)"
+
+三、说明文档（9个）
+================================================================================
+1. FOR_EXPERT_README.txt (8 KB)
+2. 00_提交包总结.md
+3. 快速开始指南.md
+4. README_专家需求分析.md (31 KB)
+5. participants_master_README.txt
+6. demographics_update_report.txt
+7. roi_summary_report.txt
+8. saccade_filtering_report.txt
+9. README_FIGURE3.txt（新增）
+
+四、数据处理脚本（6个）
+================================================================================
+位置：scripts/
+
+1. 1_merge_roi_summary.py
+2. 2_merge_events.py
+3. 3_create_participants_master.py（已修复MMSE Q1-Q5）
+4. 4_update_demographics.py（修正AD组ID映射）
+5. 5_prepare_final_package.py
+6. 6_prepare_supplementary_materials.py（新增）
+
+五、文件统计
+================================================================================
+总文件数：31个
+总大小：约2.0 MB（压缩后）
+
+核心数据：4个
+原始数据（ADQ_ID）：7个
+ROI字典：2个
+Figure 3材料：5个
+说明文档：9个
+处理脚本：6个
+
+六、关键更新（v2.0）
+================================================================================
+新增功能：
+
+1. ✅ 原始组级数据（带ADQ_ID）- 便于追溯数据来源
+2. ✅ ROI字典和映射 - 提高统计可复现性
+3. ✅ Figure 3重绘材料 - 修正术语一致性
+
+审稿抗打能力提升：
+   - 数据可追溯性：完整的ADQ_ID原始数据
+   - 方法可复现性：ROI字典 + 绘图脚本
+   - 术语一致性：Figure 3与Table 6统一
+
+七、质量保证
+================================================================================
+✓ 所有MMSE分数已修正并验证
+✓ 人口学数据完整（60人，无缺失）
+✓ 眼动数据已筛选（移除48.54%无效事件）
+✓ 术语已规范化（amplitude而非speed）
+✓ 原始数据可追溯（保留ADQ_ID）
+✓ ROI分类可验证（提供字典）
+✓ 图表可复现（提供绘图脚本）
+
+================================================================================
+版本：v2.0 | 日期：2026-01-15
+================================================================================

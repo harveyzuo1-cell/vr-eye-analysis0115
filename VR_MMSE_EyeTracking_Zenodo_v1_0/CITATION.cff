@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite it as below."
+type: dataset
+title: "VR-MMSE + Eye-Tracking Dataset for Alzheimer's Disease and MCI Detection"
+version: 1.0.0
+date-released: 2026-01-16
+abstract: "This dataset contains participant-level data from a VR-based Mini-Mental State Examination (MMSE) study combined with eye-tracking measurements. It includes 60 participants (20 healthy controls, 20 with Mild Cognitive Impairment, and 20 with Alzheimer's Disease). The dataset supports reproducible analysis of eye-tracking features for cognitive assessment, including cross-validated ROC analysis and saccade amplitude patterns across VR-MMSE tasks."
+keywords:
+  - Virtual Reality
+  - Eye-tracking
+  - Alzheimer's Disease
+  - Mild Cognitive Impairment
+  - MMSE
+  - Saccade Amplitude
+  - ROC Analysis
+  - Machine Learning
+license: CC-BY-4.0
+repository-code: "https://zenodo.org/[TO_BE_ASSIGNED]"
+authors:
+  - family-names: "[Your Last Name]"
+    given-names: "[Your First Name]"
+    orcid: "[Your ORCID]"
+  - family-names: "[Co-author Last Name]"
+    given-names: "[Co-author First Name]"
+contact:
+  - email: "[contact@email.com]"
+    name: "[Contact Person Name]"
